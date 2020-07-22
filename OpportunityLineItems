@@ -1,0 +1,55 @@
+<messaging:emailTemplate subject="The following Opportunity has been updated to Closed Won Status: {!relatedTo.Name}"
+                         recipientType="User" 
+                         relatedToType="Opportunity">
+    <messaging:htmlEmailBody >
+        <html>
+            <center>
+                <body>
+  
+                <p> <apex:image value="https://Salesforce--c.na102.content.force.com/servlet/servlet.ImageServer?id=0153Z000003jALd&oid=00Dj0000001njp7&lastMod=1556718643000"  > </apex:image> </p>
+
+  
+                <p>Please confirm all information is correct before creating Sales Order.</p>
+
+
+                <br />------------------------------------------------------------ <br/>
+                <b>• Opportunity Name: </b> <apex:outputlink value="{!LEFT($Api.Partner_Server_URL_140,FIND('.com',$Api.Partner_Server_URL_140)+4)+relatedTo.Id}">{!relatedTo.Name}</apex:outputlink> <br/>
+                <b>• Opportunity Owner:</b> {!relatedTo.Opportunity_Owner_Name__c }<br/>
+                <b>• Client Services Rep:</b> {!relatedTo.Client_Services_Rep__c  }<br/>
+                <b>• Close Date: </b> <apex:outputText value="{0,date,MM/dd/yyyy}"> <apex:param value="{!relatedTo.CloseDate}" /> </apex:outputText>  <br/>
+                <b>• Account Name:</b> <apex:outputlink value="{!LEFT($Api.Partner_Server_URL_140,FIND('.com',$Api.Partner_Server_URL_140)+4)+relatedTo.Account.Id}"> {!relatedTo.Account.Name} </apex:outputlink> <br/>  
+                <b>• State:</b> {!relatedTo.Account.BillingState}<br/>  
+                <b>• Amount: </b> <apex:outputText value="{0,number, Currency}"> <apex:param value="{!relatedTo.Amount}"/> </apex:outputText> <br/>
+                <b>• Billing Contact: </b> {!relatedTo.Billing_Contact__r.Name} <br/>
+                <b>• Primary Contact: </b> {!relatedTo.Primary_Contact__r.Name} <br/>
+                <b>• Welcome Call: </b> <apex:outputText value="{0,date,EEEE, MMMM d, yyyy}"><apex:param value="{!RelatedTo.Welcome_Call__c - 0.1666666}" /></apex:outputText> &nbsp; <apex:outputText value="{0,date,hh:mm a}"><apex:param value="{!RelatedTo.Welcome_Call__c - 0.1666666}" /></apex:outputText>  
+                <br />------------------------------------------------------------
+
+
+                <p>Below is a list of product(s) related to the opportunity:</p>
+
+                <table border="1.5" cellpadding="5" style="border-collapse: collapse" bordercolor= "black">
+                    <tr> 
+                        <th>Product Name</th> <th>Aircraft Make</th> <th>Aircraft Model</th> <th>Total Price</th> <th>Discount</th> 
+                    </tr>
+                
+                    <!-- The <apex:repeat> is a standard component to Visualforce. This iteration component allows to output the content of a collection. -->
+                    <apex:repeat value="{!relatedTo.OpportunityLineItems}" var="prod">
+                
+                    <tr> 
+                        <!-- The <apex:outputLink> provides a record link to a URL. -->                   
+                        <td> <apex:outputlink value="{!LEFT($Api.Partner_Server_URL_140,FIND('.com',$Api.Partner_Server_URL_140)+4)+prod.Id}">{!prod.Product_Name__c}</apex:outputlink></td>  
+                        <td> {!prod.Make__c} </td>
+                        <td> {!prod.Model__c} </td> 
+                        <td> <apex:outputText value="{0,number, Currency}"><apex:param value="{!prod.TotalPrice}"/></apex:outputText></td>
+                        <td> {!prod.Discount__c} </td> 
+                    </tr>
+                
+                    </apex:repeat>
+                </table>
+
+                </body>
+            </center>
+        </html>
+    </messaging:htmlEmailBody>
+</messaging:emailTemplate>
